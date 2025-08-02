@@ -1,3 +1,5 @@
+### 1. Clone the Repo
+
 git clone https://github.com/wuraola221/PlanIT-Frontend.git
 cd PlanIT-Frontend
 
