@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useEffect } from "react";
 import Image from 'next/image';
 import testImg from "@/assets/asset-test-img.png"
-import testImg2 from "@/app/testimage.png"
 //import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
@@ -18,48 +18,138 @@ export default function RegisterPage() {
 
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  
+
+  const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    validateForm();
+  }, [formData, touched]);
+
+  const validateForm = () => {
+    let newErrors: { [key: string]: string } = {};
+
+    if(touched.fullName && !formData.fullName.trim()) {
+      newErrors.fullName = 'Full Name is required';
+    }
+
+    if(touched.email) {
+      if(!formData.email.trim()) {
+        newErrors.email = 'Email is required';
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = 'Email is invalid';
+      }
+    }
+
+    if(touched.password) {
+      if(!formData.password.trim()) {
+        newErrors.password = 'Password is required';
+      } else if (formData.password.length < 8) {
+        newErrors.password = 'Password must be at least 8 characters';
+      } else if (!/[A-Z]/.test(formData.password) ||
+      !/[0-9]/.test(formData.password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+        newErrors.password = 'Password must contain at least one uppercase letter, one number, and one special character';
+      }
+    }
+    if (touched.role && !formData.role) {
+      newErrors.role = 'Role is required';
+    }
+
+    // setIsFormValid(Object.keys(newErrors).length === 0);
+  setErrors(newErrors);
+
+  const allFieldsValid = 
+      formData.fullName.trim() &&
+      formData.email.trim() &&
+      /\S+@\S+\.\S+/.test(formData.email) &&
+      formData.password.trim() &&
+      formData.password.length >= 8 &&
+      /[A-Z]/.test(formData.password) &&
+      /[0-9]/.test(formData.password) &&
+      /[!@#$%^&*(),.?":{}|<>]/.test(formData.password) &&
+      formData.role;
+    
+    setIsFormValid(!!allFieldsValid); // Ensure a boolean value is passed
+};
+
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+
+    if (!touched[name]) {
+      setTouched({ ...touched, [name]: true });
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name } = e.target;
+    // Mark field as touched when user leaves the field
+    setTouched({ ...touched, [name]: true });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSuccessMsg('');
-    setErrorMsg('');
+
+    setTouched({
+      fullName: true,
+      email: true,
+      password: true,
+      role: true,
+    });
+    
+    if (!isFormValid) {
+      setErrorMsg("Please fix the errors before submitting.");
+      return;
+    }
+    
 
     //Replace the await below to the correct path of your api
     try {
       const res = await fetch('http://localhost:8080/api/v2.0/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
+    
       if (res.ok) {
         setFormData({ fullName: '', email: '', password: '', role: '' });
+        setTouched({}); 
+        setErrors({});
         setSuccessMsg('Registration successful! Please check your email to activate your account.');
+        setErrorMsg('');
       } else {
-        const error = await res.json();
-        setErrorMsg(error.message || 'Registration failed');
+        let errorData;
+        try {
+          errorData = await res.json();
+        } catch {
+          errorData = { message : 'An error occurred during registration.' };
+        }
+        setErrorMsg(errorData.message || 'Registration failed');
       }
     } catch (error: unknown) {
-      setErrorMsg('Server error: ' + (error instanceof Error ? error.message : 'Try again later.'));
+      setErrorMsg(
+        'Server error: ' +
+        (error instanceof Error ? error.message : 'Something went wrong. Please try again later.')
+      );
+      setSuccessMsg('');
     }
-    
-  };
+}
 
       //Replace the await below to the correct path of your api for resending the activation link
       const handleResendActivation = async () => {
-      setSuccessMsg('');
-      setErrorMsg('');
-
-      if (!formData.email) {
-        setErrorMsg('Please enter your email above first.');
-        return;
-      }
+        setSuccessMsg('');
+        setErrorMsg('');
+  
+        if (!formData.email) {
+          setErrorMsg('Please enter your email above first.');
+          return;
+        }
 
       try {
         const res = await fetch('http://localhost:8080/api/v2.0/auth/resend-activation', {
@@ -87,23 +177,17 @@ export default function RegisterPage() {
     <div className="flex min-h-screen bg-gray-50">
   {/* Left Panel */}
   <div className="w-1/2 bg-blue-900 text-white">
-    <div className="max-w-md mx-auto px-12 pt-24 text-left">
+    <div className="max-w-md mx-auto ml-10 px-12 pt-17 text-left">
      
-      <h1 className="text-3xl font-bold pr-26 mb-4">Welcome to our community </h1>
-      <p className="text-base mb-10">
-        Register today to gain secure access, manage tasks seamlessly,
-        and collaborate effortlessly with your team.
+      <h1 className="text-3xl font-bold  pr-26 mt-2">Welcome to <br/>our community </h1>
+      <p className="text-base mt-[24px] mb-[80px]">
+        Register today to gain secure access.<br/> manage tasks seamlessly,
+        and collaborate<br/> effortlessly with your team.
       </p>
-      <Image
-          src={testImg}
-          alt="Illustration"
-          width={20}
-          height={20}
-          className="w-5 h-5 mx-auto object-contain"
-        />
+      
       <div className="bg-white p-6 rounded-xl shadow-md">
         <Image
-          src={testImg2}
+          src={testImg}
           alt="Illustration"
           width={192}
           height={280}
@@ -128,8 +212,10 @@ export default function RegisterPage() {
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
+                onBlur={handleBlur} 
                 className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              {errors.fullName && <p className="text-red-600 text-sm">{errors.fullName}</p>}
             </div>
 
             <div>
@@ -139,8 +225,10 @@ export default function RegisterPage() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
             </div>
 
             <div>
@@ -150,8 +238,10 @@ export default function RegisterPage() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              {errors.password && <p className="text-red-600 text-sm">{errors.password}</p>}
             </div>
 
             <div>
@@ -161,6 +251,7 @@ export default function RegisterPage() {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   className="w-full border border-gray-300 rounded-lg p-2 pr-10 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select a role</option>
@@ -186,11 +277,24 @@ export default function RegisterPage() {
 
             <button
               type="submit"
+              disabled={!isFormValid}
               className="mt-4 w-full bg-blue-900 text-white py-2 rounded-lg hover:bg-blue-800 transition"
             >
               Register
             </button>
           </form>
+          {successMsg && (
+            <div className="mt-4 p-3 rounded-lg bg-green-100 text-green-700 border border-green-300">
+              {successMsg}
+            </div>
+          )}
+
+          {errorMsg && (
+            <div className="mt-4 p-3 rounded-lg bg-red-100 text-red-700 border border-red-300">
+              {errorMsg}
+           </div>
+          )}
+
           <div > 
             <p className='text-gray-600 mt-3 mb-4'>Have an account already?<a href=""> <span className='text-blue-900'>Login</span></a></p>
           </div>
