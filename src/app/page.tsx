@@ -27,7 +27,7 @@ export default function RegisterPage() {
 
     //Replace the await below to the correct path of your api
     try {
-      const res = await fetch('http://localhost:8080/api/auth/register', {
+      const res = await fetch('http://localhost:8080/api/v2.0/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ export default function RegisterPage() {
       }
 
       try {
-        const res = await fetch('http://localhost:8080/api/auth/resend-activation', {
+        const res = await fetch('http://localhost:8080/api/v2.0/auth/resend-activation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email }),
@@ -80,74 +80,112 @@ export default function RegisterPage() {
   
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-gray-100 p-8 rounded w-full max-w-md space-y-4"
-      >
-        <h1 className="text-2xl font-bold text-center text-black">Register</h1>
 
-        {successMsg && <p className="text-green-600">{successMsg}</p>}
-        {errorMsg && <p className="text-red-600">{errorMsg}</p>}
-
-        <input
-          type="text"
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleChange}
-          placeholder="Full Name"
-          required
-          className="w-full p-2 border rounded text-black"
+    <div className="flex min-h-screen bg-gray-50">
+  {/* Left Panel */}
+  <div className="w-1/2 bg-blue-900 text-white">
+    <div className="max-w-md mx-auto px-12 pt-24 text-left">
+     
+      <h1 className="text-3xl font-bold pr-26 mb-4">Welcome to our community </h1>
+      <p className="text-base mb-10">
+        Register today to gain secure access, manage tasks seamlessly,
+        and collaborate effortlessly with your team.
+      </p>
+      <div className="bg-white p-6 rounded-xl shadow-md">
+        <img
+          src="/register copy.png"  
+          alt="Illustration"
+          className="w-48 h-70 mx-auto object-contain"
         />
+      </div>
+    </div>
+  </div>
 
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Email"
-          required
-          className="w-full p-2 border rounded text-black"
-        />
+    <div className="flex flex-col justify-center w-1/2 p-12">
+        <div className="max-w-md w-full mx-auto">
+          <h2 className="text-2xl font-bold mb-2">Join PlanIT</h2>
+          <p className="text-gray-600 mb-6">
+            Your platform for organized, efficient task management
+          </p>
 
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Password"
-          required
-          className="w-full p-2 border rounded text-black"
-        />
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block mb-1 font-medium">Full Name</label>
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-        <select
-          name="role"
-          value={formData.role}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border rounded text-black"
-        >
-          <option value="">Select Role</option>
-          <option value="leadDeveloper">Lead Developer</option>
-          <option value="developer">Developer</option>
-        </select>
+            <div>
+              <label className="block mb-1 font-medium">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-      <button
-        type="button"
-        onClick={handleResendActivation}
-        className="text-sm text-blue-500 hover:underline cursor-pointer"
-      >
-        Resend Activation Link
-      </button>
+            <div>
+              <label className="block mb-1 font-medium">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1 font-medium">Role</label>
+              <div className="relative">
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg p-2 pr-10 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select a role</option>
+                  <option value="LEAD_DEVELOPER">Lead Developer</option>
+                  <option value="DEVELOPER">Developer</option>
+                </select>
+
+    
+                <svg
+                  className="absolute right-3 top-1/2 -translate-y-1/2 pl-2 pointer-events-none text-gray-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
 
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 cursor-pointer"
-        >
-          Register
-        </button>
-      </form>
+            <button
+              type="submit"
+              className="mt-4 w-full bg-blue-900 text-white py-2 rounded-lg hover:bg-blue-800 transition"
+            >
+              Register
+            </button>
+          </form>
+          <div > 
+            <p className='text-gray-600 mt-3 mb-4'>Have an account already?<a href=""> <span className='text-blue-900'>Login</span></a></p>
+          </div>
+        </div>
+      </div>
     </div>
   );
+    
+    
 }
