@@ -92,9 +92,14 @@ export default function RegisterPage() {
         Register today to gain secure access, manage tasks seamlessly,
         and collaborate effortlessly with your team.
       </p>
+      <Image
+          src="/assets/asset-test-img.png"
+          alt="Illustration"
+          className="w-5 h-5 mx-auto object-contain"
+        />
       <div className="bg-white p-6 rounded-xl shadow-md">
         <Image
-          src="/register copy.png"  
+          src="testimage.png"  
           alt="Illustration"
           className="w-48 h-70 mx-auto object-contain"
         />
