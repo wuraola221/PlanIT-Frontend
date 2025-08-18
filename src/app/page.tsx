@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import testImg from "@/assets/asset-test-img.png"
+import testImg2 from "@/app/testimage.png"
 //import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
@@ -93,14 +95,18 @@ export default function RegisterPage() {
         and collaborate effortlessly with your team.
       </p>
       <Image
-          src="/assets/asset-test-img.png"
+          src={testImg}
           alt="Illustration"
+          width={20}
+          height={20}
           className="w-5 h-5 mx-auto object-contain"
         />
       <div className="bg-white p-6 rounded-xl shadow-md">
         <Image
-          src="testimage.png"  
+          src={testImg2}
           alt="Illustration"
+          width={192}
+          height={280}
           className="w-48 h-70 mx-auto object-contain"
         />
       </div>
