@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 //import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
@@ -92,7 +93,7 @@ export default function RegisterPage() {
         and collaborate effortlessly with your team.
       </p>
       <div className="bg-white p-6 rounded-xl shadow-md">
-        <img
+        <Image
           src="/register copy.png"  
           alt="Illustration"
           className="w-48 h-70 mx-auto object-contain"
