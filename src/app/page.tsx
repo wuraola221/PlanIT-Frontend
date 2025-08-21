@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useEffect } from "react";
+import { useCallback } from "react";
+
 import Image from 'next/image';
 import testImg from "@/assets/asset-test-img.png"
 //import { useRouter } from 'next/navigation';
@@ -24,56 +26,63 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isFormValid, setIsFormValid] = useState(false);
 
-  useEffect(() => {
-    validateForm();
-  }, [formData, touched]);
 
-  const validateForm = () => {
-    let newErrors: { [key: string]: string } = {};
+// ...
 
-    if(touched.fullName && !formData.fullName.trim()) {
-      newErrors.fullName = 'Full Name is required';
+const validateForm = useCallback(() => {
+  const newErrors: { [key: string]: string } = {};
+
+  if (touched.fullName && !formData.fullName.trim()) {
+    newErrors.fullName = "Full Name is required";
+  }
+
+  if (touched.email) {
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
     }
+  }
 
-    if(touched.email) {
-      if(!formData.email.trim()) {
-        newErrors.email = 'Email is required';
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = 'Email is invalid';
-      }
-    }
-
-    if(touched.password) {
-      if(!formData.password.trim()) {
-        newErrors.password = 'Password is required';
-      } else if (formData.password.length < 8) {
-        newErrors.password = 'Password must be at least 8 characters';
-      } else if (!/[A-Z]/.test(formData.password) ||
+  if (touched.password) {
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    } else if (
+      !/[A-Z]/.test(formData.password) ||
       !/[0-9]/.test(formData.password) ||
-      !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
-        newErrors.password = 'Password must contain at least one uppercase letter, one number, and one special character';
-      }
+      !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)
+    ) {
+      newErrors.password =
+        "Password must contain at least one uppercase letter, one number, and one special character";
     }
-    if (touched.role && !formData.role) {
-      newErrors.role = 'Role is required';
-    }
+  }
 
-    // setIsFormValid(Object.keys(newErrors).length === 0);
+  if (touched.role && !formData.role) {
+    newErrors.role = "Role is required";
+  }
+
   setErrors(newErrors);
 
-  const allFieldsValid = 
-      formData.fullName.trim() &&
-      formData.email.trim() &&
-      /\S+@\S+\.\S+/.test(formData.email) &&
-      formData.password.trim() &&
-      formData.password.length >= 8 &&
-      /[A-Z]/.test(formData.password) &&
-      /[0-9]/.test(formData.password) &&
-      /[!@#$%^&*(),.?":{}|<>]/.test(formData.password) &&
-      formData.role;
-    
-    setIsFormValid(!!allFieldsValid); // Ensure a boolean value is passed
-};
+  const allFieldsValid =
+    formData.fullName.trim() &&
+    formData.email.trim() &&
+    /\S+@\S+\.\S+/.test(formData.email) &&
+    formData.password.trim() &&
+    formData.password.length >= 8 &&
+    /[A-Z]/.test(formData.password) &&
+    /[0-9]/.test(formData.password) &&
+    /[!@#$%^&*(),.?":{}|<>]/.test(formData.password) &&
+    formData.role;
+
+  setIsFormValid(!!allFieldsValid);
+}, [formData, touched]);
+
+useEffect(() => {
+  validateForm();
+}, [validateForm]);
+
 
 
 
@@ -165,9 +174,9 @@ export default function RegisterPage() {
         } else {
           setErrorMsg(data.message || 'Failed to resend activation link.');
         }
-      } catch (err: unknown) {
-        setErrorMsg('Error resending activation link: ' + (err instanceof Error ? err.message : 'Unknown error'));
-      }
+      } catch (_) {
+        setErrorMsg("Something went wrong.");
+      }      
     };
 
   
