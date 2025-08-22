@@ -35,7 +35,7 @@ export default function ResetPasswordPage() {
         // Redirect to login after 2 seconds
         setTimeout(() => {
           router.push('/login');
-        }, 2000);
+        }, 1000);
       } else {
         const data = await res.json();
         setError(data.message || "Failed to reset password.");

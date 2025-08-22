@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('');
-    const [message, setMessage] = useState<String | null>(null);
-    const [error, setError] = useState<String | null>(null);
+    const [message, setMessage] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
