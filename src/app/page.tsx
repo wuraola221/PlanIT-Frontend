@@ -174,7 +174,7 @@ useEffect(() => {
         } else {
           setErrorMsg(data.message || 'Failed to resend activation link.');
         }
-      } catch (_) {
+      } catch{
         setErrorMsg("Something went wrong.");
       }      
     };
@@ -305,7 +305,7 @@ useEffect(() => {
           )}
 
           <div > 
-            <p className='text-gray-600 mt-3 mb-4'>Have an account already?<Link href="/login"> <span className='text-blue-900'>Login</span></Link></p>
+            <p className='text-gray-600 mt-3 mb-4'>Have an account already?<Link href="/login"> <span className='text-blue-900'>Login</span></Link> <span onClick={handleResendActivation} className='text-blue-900 pl-[75px] cursor-pointer hover:underline'>Resend Activation?</span></p>
           </div>
         </div>
       </div>
