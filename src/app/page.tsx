@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useEffect } from "react";
 import { useCallback } from "react";
-
+import Link from 'next/link';
 import Image from 'next/image';
 import testImg from "@/assets/asset-test-img.png"
 //import { useRouter } from 'next/navigation';
@@ -215,7 +215,7 @@ useEffect(() => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block mb-1 font-medium">Full Name</label>
+              <label className="block mb-1 font-medium text-black">Full Name</label>
               <input
                 type="text"
                 name="fullName"
@@ -228,7 +228,7 @@ useEffect(() => {
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Email Address</label>
+              <label className="block mb-1 font-medium text-black">Email Address</label>
               <input
                 type="email"
                 name="email"
@@ -241,7 +241,7 @@ useEffect(() => {
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Password</label>
+              <label className="block mb-1 font-medium text-black">Password</label>
               <input
                 type="password"
                 name="password"
@@ -254,7 +254,7 @@ useEffect(() => {
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Role</label>
+              <label className="block mb-1 font-medium text-black">Role</label>
               <div className="relative">
                 <select
                   name="role"
@@ -305,7 +305,7 @@ useEffect(() => {
           )}
 
           <div > 
-            <p className='text-gray-600 mt-3 mb-4'>Have an account already?<a href=""> <span className='text-blue-900'>Login</span></a></p>
+            <p className='text-gray-600 mt-3 mb-4'>Have an account already?<Link href="/login"> <span className='text-blue-900'>Login</span></Link></p>
           </div>
         </div>
       </div>
