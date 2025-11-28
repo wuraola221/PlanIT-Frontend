@@ -3,10 +3,13 @@
 import { useState } from 'react';
 import { useEffect } from "react";
 import { useCallback } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import Link from 'next/link';
 import Image from 'next/image';
 import testImg from "@/assets/asset-test-img.png"
 //import { useRouter } from 'next/navigation';
+
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export default function RegisterPage() {
   // const router = useRouter();
@@ -25,9 +28,8 @@ export default function RegisterPage() {
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isFormValid, setIsFormValid] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-
-// ...
 
 const validateForm = useCallback(() => {
   const newErrors: { [key: string]: string } = {};
@@ -120,7 +122,7 @@ useEffect(() => {
 
     //Replace the await below to the correct path of your api
     try {
-      const res = await fetch('http://localhost:8080/api/v2.0/auth/register', {
+      const res = await fetch(`${backendUrl}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -161,7 +163,7 @@ useEffect(() => {
         }
 
       try {
-        const res = await fetch('http://localhost:8080/api/v2.0/auth/resend-activation', {
+        const res = await fetch('${backendUrl}/auth/resend-activation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email }),
@@ -239,17 +241,25 @@ useEffect(() => {
               />
               {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
             </div>
-
             <div>
               <label className="block mb-1 font-medium text-black">Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className="w-full border border-gray-300 rounded-lg p-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
               {errors.password && <p className="text-red-600 text-sm">{errors.password}</p>}
             </div>
 
@@ -305,7 +315,7 @@ useEffect(() => {
           )}
 
           <div > 
-            <p className='text-gray-600 mt-3 mb-4'>Have an account already?<Link href="/login"> <span className='text-blue-900'>Login</span></Link> <span onClick={handleResendActivation} className='text-blue-900 pl-[75px] cursor-pointer hover:underline'>Resend Activation?</span></p>
+            <p className='text-gray-600 mt-3 mb-4'>Have an account already?<Link href="/auth/login"> <span className='text-blue-900'>Login</span></Link> <span onClick={handleResendActivation} className='text-blue-900 pl-[75px] cursor-pointer hover:underline'>Resend Activation?</span></p>
           </div>
         </div>
       </div>
