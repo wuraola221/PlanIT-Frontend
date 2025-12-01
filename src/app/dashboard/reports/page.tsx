@@ -47,7 +47,7 @@ export default function TaskBoard() {
     done: { title: 'Done', color: 'bg-green-100' },
   };
 
-  const handleDragEnd = async (result: any) => {
+  const handleDragEnd = async (result: { destination: { droppableId: string; index: number } | null; source: { droppableId: string; index: number }; draggableId: string }) => {
     const { destination, source, draggableId } = result;
 
     if (!destination) return; // dropped outside

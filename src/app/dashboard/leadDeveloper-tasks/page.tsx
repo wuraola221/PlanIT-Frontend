@@ -127,7 +127,7 @@ export default function LeadDeveloperTasksPage() {
     };
 
     fetchTasks();
-  }, [user.email, user.token]);
+  }, [user, user.email, user.token]);
 
   useEffect(() => {
     if (!user || !user.token) return;
@@ -152,7 +152,7 @@ export default function LeadDeveloperTasksPage() {
     }; 
     fetchDevelopers();
 
-  }, [user.token]);
+  }, [user, user.token]);
 
   
 
