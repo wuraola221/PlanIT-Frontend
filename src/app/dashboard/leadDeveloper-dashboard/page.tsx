@@ -9,6 +9,7 @@ import {
   LogOut,
   User,
   ChevronDown,
+  
 
 } from 'lucide-react'
 import { useRouter } from "next/navigation";
@@ -265,14 +266,6 @@ export default function LeadDeveloperPage() {
                     <p className="text-sm font-medium text-gray-900">{user?.fullName}</p>
                     <p className="text-[10px] text-gray-500">{user?.email}</p>
                   </div>
-                  
-                  {/* <button
-                    onClick={handleProfileClick}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    <User className="w-4 h-4 mr-3" />
-                    Profile
-                  </button> */}
                   
                   <button
                     onClick={handleLogout}
