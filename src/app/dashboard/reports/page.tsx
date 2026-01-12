@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 export default function Reports() {
     return (
         <div className="p-4">
